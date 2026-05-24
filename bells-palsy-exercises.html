@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bell's Palsy Facial Exercises</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --bg2: #171b26;
+    --bg3: #1e2330;
+    --card: #1e2330;
+    --accent: #64cfb4;
+    --accent2: #f0917a;
+    --accent3: #a78bfa;
+    --text: #e8eaf0;
+    --text2: #8b92a8;
+    --border: rgba(255,255,255,0.07);
+    --timer-stroke: #64cfb4;
+    --radius: 18px;
+    --radius-sm: 10px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 40px;
+    overflow-x: hidden;
+  }
+
+  header {
+    width: 100%;
+    padding: 24px 20px 16px;
+    text-align: center;
+    background: linear-gradient(to bottom, #0f1117ee, transparent);
+    position: relative;
+    z-index: 2;
+  }
+
+  .logo-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(100,207,180,0.1);
+    border: 1px solid rgba(100,207,180,0.25);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 5vw, 28px);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  header p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  .progress-bar-wrap {
+    width: calc(100% - 40px);
+    max-width: 520px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 999px;
+    margin: 14px auto 0;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .ex-counter {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  /* Camera */
+  .camera-wrap {
+    width: calc(100% - 40px);
+    max-width: 360px;
+    margin: 16px auto 0;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+  }
+
+  #camFeed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    display: block;
+  }
+
+  .cam-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(15,17,23,0.7) 0%, transparent 40%);
+  }
+
+  .cam-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text2);
+    font-size: 13px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .cam-placeholder svg {
+    opacity: 0.4;
+  }
+
+  .enable-cam-btn {
+    background: rgba(100,207,180,0.12);
+    border: 1px solid rgba(100,207,180,0.3);
+    color: var(--accent);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .enable-cam-btn:hover { background: rgba(100,207,180,0.2); }
+
+  .face-guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
+    width: 55%;
+    aspect-ratio: 3/4;
+    border: 1.5px dashed rgba(100,207,180,0.35);
+    border-radius: 50% 50% 45% 45%;
+    pointer-events: none;
+  }
+
+  /* Timer ring */
+  .timer-ring-wrap {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .timer-ring-wrap svg {
+    transform: rotate(-90deg);
+  }
+
+  .timer-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 4; }
+  .timer-fg {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear;
+  }
+
+  .timer-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--text);
+  }
+
+  .timer-text.urgent { color: var(--accent2); }
+
+  /* Exercise card */
+  .ex-card {
+    width: calc(100% - 40px);
+    max-width: 360px;
+    margin: 16px auto 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .ex-number {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .ex-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .ex-desc {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .ex-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(167,139,250,0.08);
+    border: 1px solid rgba(167,139,250,0.18);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #c4b5fd;
+    line-height: 1.5;
+  }
+
+  .ex-tip-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    opacity: 0.8;
+  }
+
+  .reps-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(240,145,122,0.1);
+    border: 1px solid rgba(240,145,122,0.2);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+
+  /* Controls */
+  .controls {
+    width: calc(100% - 40px);
+    max-width: 360px;
+    margin: 16px auto 0;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a1a15;
+    border-color: transparent;
+    font-weight: 600;
+  }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--text2);
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+  .btn-secondary:active { transform: scale(0.98); }
+
+  .btn-skip {
+    background: transparent;
+    color: var(--text2);
+    border-color: transparent;
+    flex: 0 0 auto;
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+  .btn-skip:hover { color: var(--text); }
+
+  /* Exercise nav dots */
+  .ex-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 18px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+  .dot.done { background: rgba(100,207,180,0.4); border-color: rgba(100,207,180,0.3); }
+  .dot.active { background: var(--accent); border-color: var(--accent); width: 18px; border-radius: 3px; }
+
+  /* Completion screen */
+  .complete-screen {
+    display: none;
+    width: calc(100% - 40px);
+    max-width: 360px;
+    margin: 20px auto 0;
+    text-align: center;
+    padding: 32px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .complete-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(100,207,180,0.12);
+    border: 1px solid rgba(100,207,180,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+
+  .complete-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .complete-screen p {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .stat-pill {
+    flex: 1;
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+  }
+
+  .stat-pill .val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+  }
+
+  .stat-pill .lbl {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  /* Animation */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .ex-card { animation: fadeSlideIn 0.35s ease; }
+
+  /* Pulsing ring when active */
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(100,207,180,0.25); }
+    70% { box-shadow: 0 0 0 8px rgba(100,207,180,0); }
+    100% { box-shadow: 0 0 0 0 rgba(100,207,180,0); }
+  }
+
+  .camera-wrap.active-exercise { animation: pulse-ring 2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-tag">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" stroke="currentColor"/><path d="M3 5.5L4.5 7L7 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Facial Rehab
+  </div>
+  <h1>Bell's Palsy<br><em>Exercise Routine</em></h1>
+  <p id="headerSub">8 exercises · 60 seconds each · ~10 min total</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+  <p class="ex-counter" id="exCounter">Exercise 1 of 8</p>
+</header>
+
+<!-- Camera -->
+<div class="camera-wrap" id="camWrap">
+  <video id="camFeed" autoplay playsinline muted></video>
+  <div class="cam-overlay"></div>
+  <div class="face-guide"></div>
+
+  <div class="cam-placeholder" id="camPlaceholder">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+    </svg>
+    <p>Enable your front camera to<br>watch your expressions</p>
+    <button class="enable-cam-btn" id="enableCamBtn">Enable Camera</button>
+  </div>
+
+  <!-- Timer ring (always in camera corner) -->
+  <div class="timer-ring-wrap" id="timerRing">
+    <svg width="64" height="64" viewBox="0 0 64 64">
+      <circle class="timer-bg" cx="32" cy="32" r="28"/>
+      <circle class="timer-fg" id="timerArc" cx="32" cy="32" r="28"
+        stroke-dasharray="175.9"
+        stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-text" id="timerNum">60</div>
+  </div>
+</div>
+
+<!-- Exercise card -->
+<div class="ex-card" id="exCard">
+  <div class="ex-number" id="exNum">Exercise 1</div>
+  <div class="ex-name" id="exName">Loading...</div>
+  <div class="reps-badge" id="repsBadge">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    60 seconds
+  </div>
+  <div class="ex-desc" id="exDesc">Description loading...</div>
+  <div class="ex-tip" id="exTip">
+    <svg class="ex-tip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span id="exTipText">Tip loading...</span>
+  </div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="btn btn-secondary" id="btnPrev">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Prev
+  </button>
+  <button class="btn btn-primary" id="btnStartStop">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" id="playIcon"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+    Start
+  </button>
+  <button class="btn btn-skip" id="btnSkip">
+    Skip
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+</div>
+
+<!-- Nav dots -->
+<div class="ex-dots" id="exDots"></div>
+
+<!-- Completion screen -->
+<div class="complete-screen" id="completeScreen">
+  <div class="complete-icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#64cfb4" stroke-width="2" stroke-linecap="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+  </div>
+  <h2>Great work!</h2>
+  <p>You completed today's facial exercise routine. Consistent daily practice helps improve nerve recovery.</p>
+  <div class="stats-row">
+    <div class="stat-pill"><div class="val">8</div><div class="lbl">Exercises</div></div>
+    <div class="stat-pill"><div class="val">~8</div><div class="lbl">Minutes</div></div>
+    <div class="stat-pill"><div class="val">1×</div><div class="lbl">Daily goal</div></div>
+  </div>
+  <p style="font-size:12.5px; color: var(--text2); line-height:1.6; margin-bottom:16px;">
+    Aim to complete this routine 1–2 times per day. Consult your physiotherapist for guidance personalized to your recovery stage.
+  </p>
+  <button class="btn btn-primary" id="btnRestart" style="width:100%; justify-content:center;">
+    Restart Routine
+  </button>
+</div>
+
+<script>
+const EXERCISES = [
+  {
+    name: "Eyebrow Raise",
+    desc: "Gently raise both eyebrows as high as possible, wrinkling your forehead. Hold for 2 seconds, then slowly relax. Focus on symmetry — try to lift the affected side equally to the healthy side.",
+    tip: "Place a finger lightly on your affected eyebrow to give tactile feedback and help recruit the muscles.",
+    reps: "10–15 slow repetitions"
+  },
+  {
+    name: "Gentle Eye Close",
+    desc: "Slowly and gently close both eyes at the same time. If the affected eye doesn't fully close, use one clean finger to gently press the eyelid shut and hold for 2 seconds. Avoid squinting hard.",
+    tip: "Use eye drops before this exercise if your eye feels dry — keeping the eye lubricated protects the cornea.",
+    reps: "10–15 repetitions"
+  },
+  {
+    name: "Nose Wrinkle",
+    desc: "Scrunch your nose upward as if smelling something unpleasant. Try to feel the muscles either side of your nose engaging. Hold for 2 seconds and release slowly. Repeat on both sides equally.",
+    tip: "Watch in the camera — you should see wrinkles forming across the bridge of your nose on both sides.",
+    reps: "10–15 slow repetitions"
+  },
+  {
+    name: "Lip Pucker",
+    desc: "Bring your lips together and pucker as if you are about to whistle or kiss. Hold the pucker for 3 seconds, feeling the tension around your mouth. Relax fully, then repeat.",
+    tip: "If puckering is asymmetric, gently hold the weaker corner of your mouth in place with a finger while practising.",
+    reps: "10 holds of 3 seconds"
+  },
+  {
+    name: "Wide Smile",
+    desc: "Slowly stretch your lips into the widest, most symmetrical smile you can manage. Aim to raise the corners of your mouth evenly. Hold for 3 seconds, then relax completely before repeating.",
+    tip: "Don't force a big asymmetric stretch — a small symmetric movement is far more beneficial than a lopsided large one.",
+    reps: "10 holds of 3 seconds"
+  },
+  {
+    name: "Cheek Puff",
+    desc: "Take a deep breath and puff out both cheeks as if holding air. Try to keep the air equal on both sides. Hold for 5 seconds. If air escapes from the affected side, gently hold it shut with a finger.",
+    tip: "You can also practise moving the air from cheek to cheek like a mouthwash motion — this gently activates the buccinator muscle.",
+    reps: "8–10 holds of 5 seconds"
+  },
+  {
+    name: "Lower Lip Depress",
+    desc: "Keeping your teeth together, pull the corners of your mouth downward and outward as if making a sad or frowning expression. Hold for 2 seconds, feeling the platysma muscle in your neck, then release.",
+    tip: "Look in the camera and observe whether both sides move equally. This exercise also helps neck and jaw muscles around the mandible.",
+    reps: "10–15 slow repetitions"
+  },
+  {
+    name: "Soft Face Massage",
+    desc: "Using the fingertips of both hands, gently massage your entire face using small circular motions. Move from forehead → temples → cheeks → jaw → around the mouth. This helps reduce stiffness and improves circulation.",
+    tip: "A few drops of a gentle facial oil makes the massage more comfortable and prevents skin tugging. Apply gentle but firm pressure.",
+    reps: "Continuous 60-second massage"
+  }
+];
+
+const CIRCUMFERENCE = 2 * Math.PI * 28;
+const TOTAL = 60;
+
+let current = 0;
+let timeLeft = TOTAL;
+let running = false;
+let interval = null;
+let camEnabled = false;
+let completedExercises = [];
+
+const exNum = document.getElementById('exNum');
+const exName = document.getElementById('exName');
+const exDesc = document.getElementById('exDesc');
+const exTipText = document.getElementById('exTipText');
+const repsBadge = document.getElementById('repsBadge');
+const timerNum = document.getElementById('timerNum');
+const timerArc = document.getElementById('timerArc');
+const progressFill = document.getElementById('progressFill');
+const exCounter = document.getElementById('exCounter');
+const exDotsEl = document.getElementById('exDots');
+const camWrap = document.getElementById('camWrap');
+const btnStartStop = document.getElementById('btnStartStop');
+const playIcon = document.getElementById('playIcon');
+const btnPrev = document.getElementById('btnPrev');
+const btnSkip = document.getElementById('btnSkip');
+const completeScreen = document.getElementById('completeScreen');
+const exCard = document.getElementById('exCard');
+const camPlaceholder = document.getElementById('camPlaceholder');
+const camFeed = document.getElementById('camFeed');
+
+function buildDots() {
+  exDotsEl.innerHTML = '';
+  EXERCISES.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (completedExercises.includes(i) ? ' done' : '') + (i === current ? ' active' : '');
+    exDotsEl.appendChild(d);
+  });
+}
+
+function renderExercise() {
+  const ex = EXERCISES[current];
+  exNum.textContent = `Exercise ${current + 1}`;
+  exName.textContent = ex.name;
+  exDesc.textContent = ex.desc;
+  exTipText.textContent = ex.tip;
+  repsBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${ex.reps}`;
+  exCounter.textContent = `Exercise ${current + 1} of ${EXERCISES.length}`;
+  progressFill.style.width = `${(completedExercises.length / EXERCISES.length) * 100}%`;
+  resetTimer();
+  buildDots();
+  exCard.style.animation = 'none';
+  void exCard.offsetWidth;
+  exCard.style.animation = 'fadeSlideIn 0.35s ease';
+}
+
+function resetTimer() {
+  clearInterval(interval);
+  running = false;
+  timeLeft = TOTAL;
+  updateTimerUI();
+  setButtonState('start');
+  if (camEnabled) camWrap.classList.remove('active-exercise');
+}
+
+function updateTimerUI() {
+  timerNum.textContent = timeLeft;
+  timerNum.className = 'timer-text' + (timeLeft <= 10 ? ' urgent' : '');
+  timerArc.style.stroke = timeLeft <= 10 ? 'var(--accent2)' : 'var(--accent)';
+  const offset = CIRCUMFERENCE * (1 - timeLeft / TOTAL);
+  timerArc.style.strokeDashoffset = offset;
+}
+
+function setButtonState(state) {
+  if (state === 'start') {
+    btnStartStop.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg> Start`;
+  } else {
+    btnStartStop.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause`;
+  }
+}
+
+function startTimer() {
+  if (timeLeft === 0) timeLeft = TOTAL;
+  running = true;
+  setButtonState('pause');
+  if (camEnabled) camWrap.classList.add('active-exercise');
+  interval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+    if (timeLeft <= 0) {
+      clearInterval(interval);
+      running = false;
+      camWrap.classList.remove('active-exercise');
+      if (!completedExercises.includes(current)) completedExercises.push(current);
+      setTimeout(() => {
+        if (current < EXERCISES.length - 1) {
+          current++;
+          renderExercise();
+          startTimer();
+        } else {
+          showComplete();
+        }
+      }, 800);
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(interval);
+  running = false;
+  setButtonState('start');
+  if (camEnabled) camWrap.classList.remove('active-exercise');
+}
+
+function showComplete() {
+  exCard.style.display = 'none';
+  document.querySelector('.controls').style.display = 'none';
+  exDotsEl.style.display = 'none';
+  completeScreen.style.display = 'block';
+  progressFill.style.width = '100%';
+  exCounter.textContent = 'All exercises complete!';
+}
+
+btnStartStop.addEventListener('click', () => {
+  if (running) pauseTimer();
+  else startTimer();
+});
+
+btnPrev.addEventListener('click', () => {
+  if (current > 0) {
+    clearInterval(interval);
+    running = false;
+    current--;
+    renderExercise();
+  }
+});
+
+btnSkip.addEventListener('click', () => {
+  clearInterval(interval);
+  running = false;
+  if (!completedExercises.includes(current)) completedExercises.push(current);
+  if (current < EXERCISES.length - 1) {
+    current++;
+    renderExercise();
+  } else {
+    showComplete();
+  }
+});
+
+document.getElementById('btnRestart').addEventListener('click', () => {
+  current = 0;
+  completedExercises = [];
+  timeLeft = TOTAL;
+  completeScreen.style.display = 'none';
+  exCard.style.display = '';
+  document.querySelector('.controls').style.display = '';
+  exDotsEl.style.display = '';
+  renderExercise();
+});
+
+document.getElementById('enableCamBtn').addEventListener('click', async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 960 } },
+      audio: false
+    });
+    camFeed.srcObject = stream;
+    camFeed.style.display = 'block';
+    camPlaceholder.style.display = 'none';
+    camEnabled = true;
+  } catch (e) {
+    camPlaceholder.querySelector('p').textContent = 'Camera access denied. You can still follow the on-screen instructions.';
+    document.getElementById('enableCamBtn').style.display = 'none';
+  }
+});
+
+// Init
+renderExercise();
+</script>
+</body>
+</html>
